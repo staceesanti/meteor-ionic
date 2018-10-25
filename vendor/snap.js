@@ -421,6 +421,7 @@
               // Tap Close
               if (cache.dragWatchers.current === 0 && translated !== 0 && settings.tapToClose) {
                 utils.dispatchEvent('close');
+                utils.dispatchEvent('menu-closed');
                 utils.events.prevent(e);
                 action.translate.easeTo(0);
                 cache.isDragging = false;
@@ -433,15 +434,18 @@
                 // Halfway, Flicking, or Too Far Out
                 if ((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)) {
                   if (cache.simpleStates.flick && cache.simpleStates.towards === 'left') { // Flicking Closed
+                    utils.dispatchEvent('menu-closed');
                     action.translate.easeTo(0);
                   } else if (
                     (cache.simpleStates.flick && cache.simpleStates.towards === 'right') || // Flicking Open OR
                     (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
                   ) {
                     action.translate.easeTo(settings.maxPosition); // Open Left
+                    utils.dispatchEvent('menu-opened');
                   }
                 } else {
                   action.translate.easeTo(0); // Close Left
+                  utils.dispatchEvent('menu-closed');
                 }
                 // Revealing Right
               } else if (cache.simpleStates.opening === 'right') {
@@ -449,14 +453,17 @@
                 if ((cache.simpleStates.halfway || cache.simpleStates.hyperExtending || cache.simpleStates.flick)) {
                   if (cache.simpleStates.flick && cache.simpleStates.towards === 'right') { // Flicking Closed
                     action.translate.easeTo(0);
+                    utils.dispatchEvent('menu-closed');
                   } else if (
                     (cache.simpleStates.flick && cache.simpleStates.towards === 'left') || // Flicking Open OR
                     (cache.simpleStates.halfway || cache.simpleStates.hyperExtending) // At least halfway open OR hyperextending
                   ) {
                     action.translate.easeTo(settings.minPosition); // Open Right
+                    utils.dispatchEvent('menu-opened');
                   }
                 } else {
                   action.translate.easeTo(0); // Close Right
+                  utils.dispatchEvent('menu-closed');
                 }
               }
               cache.isDragging = false;
@@ -493,9 +500,11 @@
           utils.klass.add(doc.body, 'snapjs-right');
           action.translate.easeTo(settings.minPosition);
         }
+        utils.dispatchEvent('menu-opened');
       };
       this.close = function() {
         utils.dispatchEvent('close');
+        utils.dispatchEvent('menu-closed');
         action.translate.easeTo(0);
       };
       this.expand = function(side){
