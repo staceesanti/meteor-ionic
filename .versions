@@ -26,7 +26,7 @@ iron:router@1.0.7
 iron:url@1.0.7
 jquery@1.11.4
 logging@1.0.8
-meteor@2.7.1
+meteor@1.10.3
 meteoric:ionic@0.2.0
 minifiers@1.1.7
 mongo-id@1.0.8
